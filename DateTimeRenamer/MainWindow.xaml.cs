@@ -48,7 +48,20 @@ namespace DateTimeRenamer
 
             if ((fileList.Count > 0) && !string.IsNullOrWhiteSpace(mainPath))
             {
-                RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex);
+                if ((ModeComboBox.SelectedIndex == 1) && (string.IsNullOrWhiteSpace(PathTextBox.Text) || !Directory.Exists(PathTextBox.Text)))
+                {
+                    CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+                    dialog.IsFolderPicker = true;
+                    if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                    {
+                        PathTextBox.Text = dialog.FileName;
+                        RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex);
+                    }
+                }
+                else
+                {
+                    RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex);
+                }
             }
         }
 
