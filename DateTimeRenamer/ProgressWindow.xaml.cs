@@ -33,7 +33,7 @@ namespace DateTimeRenamer
         }
 
 
-        public void Rename(List<string> fileList)
+        public void Rename(List<string> fileList, string srcPath, string dstPath, int mode)
         {
             Task.Run(() =>
             {
@@ -58,20 +58,26 @@ namespace DateTimeRenamer
                     {
                         string ext = System.IO.Path.GetExtension(file);
 
-                        //using (StreamWriter streamWriter = new StreamWriter(file.Replace(ext, ".txt"), false))
-                        //{
-                        //    IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(file);
-                        //    foreach (var directory in directories)
-                        //    {
-                        //        foreach (var tag in directory.Tags)
-                        //        {
-                        //            if (tag.Name.ToLower().Contains("date") || tag.Name.ToLower().Contains("creat"))
-                        //            {
-                        //                streamWriter.WriteLine($"{directory.Name} - {tag.Name} = {tag.Description}");
-                        //            }
-                        //        }
-                        //    }
-                        //}
+                        if (mode == 2) // Metadata
+                        {
+                            using (StreamWriter streamWriter = new StreamWriter(file.Replace(ext, ".txt"), false))
+                            {
+                                IEnumerable<MetadataExtractor.Directory> directories = ImageMetadataReader.ReadMetadata(file);
+                                foreach (var directory in directories)
+                                {
+                                    foreach (var tag in directory.Tags)
+                                    {
+                                        if (tag.Name.ToLower().Contains("date") || tag.Name.ToLower().Contains("creat"))
+                                        {
+                                            streamWriter.WriteLine($"{directory.Name} - {tag.Name} = {tag.Description}");
+                                        }
+                                    }
+                                }
+                            }
+
+                            success++;
+                            continue;
+                        }
 
                         string dateTime = string.Empty;
 
@@ -141,20 +147,50 @@ namespace DateTimeRenamer
                         {
                             for (int j = 0; j < 1000; j++)
                             {
-                                string filePath = file.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
-                                if (j == 0)
+                                if (mode == 0) // Rename
                                 {
-                                    filePath = file.Replace(file.Split('\\').Last(), dateTime + ext);
-                                }
+                                    string filePath = file.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
+                                    if (j == 0)
+                                    {
+                                        filePath = file.Replace(file.Split('\\').Last(), dateTime + ext);
+                                    }
 
-                                if (File.Exists(filePath))
-                                {
-                                    continue;
+                                    if (File.Exists(filePath))
+                                    {
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        File.Move(file, filePath);
+                                        break;
+                                    }
                                 }
-                                else
+                                else if (mode == 1) // Copy
                                 {
-                                    File.Move(file, filePath);
-                                    break;
+                                    string dstFilePath   = file.Replace(srcPath, dstPath);
+                                    string dstFolderPath = dstFilePath.Replace("\\" + dstFilePath.Split('\\').Last(), string.Empty);
+
+                                    DirectoryInfo directoryInfo = new DirectoryInfo(dstFolderPath);
+                                    if (!directoryInfo.Exists)
+                                    {
+                                        directoryInfo.Create();
+                                    }
+
+                                    string filePath = dstFilePath.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
+                                    if (j == 0)
+                                    {
+                                        filePath = dstFilePath.Replace(file.Split('\\').Last(), dateTime + ext);
+                                    }
+
+                                    if (File.Exists(filePath))
+                                    {
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        File.Copy(file, filePath);
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -174,20 +210,50 @@ namespace DateTimeRenamer
                             string dateTime = fileInfo.LastWriteTime.ToString("yyyy-MM-dd HH.mm.ss");
                             for (int j = 0; j < 1000; j++)
                             {
-                                string filePath = file.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
-                                if (j == 0)
+                                if (mode == 0) // Rename
                                 {
-                                    filePath = file.Replace(file.Split('\\').Last(), dateTime + ext);
-                                }
+                                    string filePath = file.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
+                                    if (j == 0)
+                                    {
+                                        filePath = file.Replace(file.Split('\\').Last(), dateTime + ext);
+                                    }
 
-                                if (File.Exists(filePath))
-                                {
-                                    continue;
+                                    if (File.Exists(filePath))
+                                    {
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        File.Move(file, filePath);
+                                        break;
+                                    }
                                 }
-                                else
+                                else if (mode == 1) // Copy
                                 {
-                                    File.Move(file, filePath);
-                                    break;
+                                    string dstFilePath   = file.Replace(srcPath, dstPath);
+                                    string dstFolderPath = dstFilePath.Replace("\\" + dstFilePath.Split('\\').Last(), string.Empty);
+
+                                    DirectoryInfo directoryInfo = new DirectoryInfo(dstFolderPath);
+                                    if (!directoryInfo.Exists)
+                                    {
+                                        directoryInfo.Create();
+                                    }
+
+                                    string filePath = dstFilePath.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
+                                    if (j == 0)
+                                    {
+                                        filePath = dstFilePath.Replace(file.Split('\\').Last(), dateTime + ext);
+                                    }
+
+                                    if (File.Exists(filePath))
+                                    {
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        File.Copy(file, filePath);
+                                        break;
+                                    }
                                 }
                             }
 

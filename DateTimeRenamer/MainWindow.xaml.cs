@@ -44,26 +44,29 @@ namespace DateTimeRenamer
 
             string[] fileDrops = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-            fileList = GetFileList(fileDrops);
+            fileList = GetFileList(fileDrops, out string mainPath);
 
-            if (fileList.Count > 0)
+            if ((fileList.Count > 0) && !string.IsNullOrWhiteSpace(mainPath))
             {
-                RenameFileList(fileList);
+                RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex);
             }
         }
 
         private void ModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch ((sender as ComboBox).SelectedIndex)
+            if ((PathTextBox != null) && (BrowseButton != null))
             {
-                case 1:
-                    PathTextBox.IsEnabled  = true;
-                    BrowseButton.IsEnabled = true;
-                    break;
-                default:
-                    PathTextBox.IsEnabled  = false;
-                    BrowseButton.IsEnabled = false;
-                    break;
+                switch ((sender as ComboBox).SelectedIndex)
+                {
+                    case 1:
+                        PathTextBox.IsEnabled  = true;
+                        BrowseButton.IsEnabled = true;
+                        break;
+                    default:
+                        PathTextBox.IsEnabled  = false;
+                        BrowseButton.IsEnabled = false;
+                        break;
+                }
             }
         }
 
@@ -78,8 +81,10 @@ namespace DateTimeRenamer
         }
 
 
-        private List<string> GetFileList(string[] fileDrops)
+        private List<string> GetFileList(string[] fileDrops, out string mainPath)
         {
+            mainPath = string.Empty;
+
             List<string> fileList = new List<string>();
 
             foreach (var fileDrop in fileDrops)
@@ -109,12 +114,17 @@ namespace DateTimeRenamer
                         fileList.Add(fileDrop);
                     }
                 }
+
+                if (string.IsNullOrWhiteSpace(mainPath))
+                {
+                    mainPath = fileDrop.Replace("\\" + fileDrop.Split('\\').Last(), string.Empty);
+                }
             }
 
             return fileList;
         }
 
-        private void RenameFileList(List<string> fileList)
+        private void RenameFileList(List<string> fileList, string srcPath, string dstPath, int mode)
         {
             if (fileList.Count > 0)
             {
@@ -122,7 +132,7 @@ namespace DateTimeRenamer
 
                 ProgressWindow progressWindow = new ProgressWindow();
                 progressWindow.Show();
-                progressWindow.Rename(fileList);
+                progressWindow.Rename(fileList, srcPath, dstPath, mode);
 
                 this.AllowDrop = true;
             }
