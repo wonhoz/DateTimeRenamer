@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -48,6 +49,31 @@ namespace DateTimeRenamer
             if (fileList.Count > 0)
             {
                 RenameFileList(fileList);
+            }
+        }
+
+        private void ModeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch ((sender as ComboBox).SelectedIndex)
+            {
+                case 1:
+                    PathTextBox.IsEnabled  = true;
+                    BrowseButton.IsEnabled = true;
+                    break;
+                default:
+                    PathTextBox.IsEnabled  = false;
+                    BrowseButton.IsEnabled = false;
+                    break;
+            }
+        }
+
+        private void BrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                PathTextBox.Text = dialog.FileName;
             }
         }
 

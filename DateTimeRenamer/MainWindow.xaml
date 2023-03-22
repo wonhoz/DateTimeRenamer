@@ -5,8 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DateTimeRenamer"
         mc:Ignorable="d"
-        Title="Date Time Renamer" Height="150" Width="300" WindowStartupLocation="CenterScreen" AllowDrop="True" Drop="Window_Drop">
+        Title="Date Time Renamer" Height="200" Width="400" WindowStartupLocation="CenterScreen" AllowDrop="True" Drop="Window_Drop">
     <Grid>
-        <TextBlock Text="Drag and drop files here" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Grid.ColumnSpan="3" Text="Drag and drop files here"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <ComboBox Grid.Row="1" Name="ModeComboBox" SelectedIndex="0" Margin="5,5,2.5,5"
+                  SelectionChanged="ModeComboBox_SelectionChanged"
+                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <ComboBoxItem Content="Rename"/>
+            <ComboBoxItem Content="Copy"/>
+            <ComboBoxItem Content="Metadata"/>
+        </ComboBox>
+
+        <TextBox Grid.Row="1" Grid.Column="1" Name="PathTextBox" Margin="2.5,5" IsEnabled="False"/>
+
+        <Button Grid.Row="1" Grid.Column="2" Name="BrowseButton" Content="Browse" Margin="2.5,5,5,5"
+                IsEnabled="False" Click="BrowseButton_Click"/>
     </Grid>
 </Window>
