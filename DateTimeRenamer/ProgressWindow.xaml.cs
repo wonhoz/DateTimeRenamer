@@ -281,6 +281,7 @@ namespace DateTimeRenamer
 
                 System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
                 {
+                    this.Topmost = true;
                     if (StopRename)
                     {
                         MessageBox.Show($"Upload Stopped! Success: {success}, Failure: {fail}", "Date Time Renamer");
