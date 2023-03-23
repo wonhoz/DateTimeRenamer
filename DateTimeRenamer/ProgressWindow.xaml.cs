@@ -126,7 +126,7 @@ namespace DateTimeRenamer
                                         tmpDateTime = tmpDateTime.AddHours(9);
                                         dateTime = tmpDateTime.ToString("yyyy-MM-dd HH.mm.ss");
 
-                                        if (dateTime == "1904-01-01 09:00:00") dateTime = string.Empty;
+                                        if (dateTime == "1904-01-01 09.00.00") dateTime = string.Empty;
                                     }
                                 }
                                 break;
