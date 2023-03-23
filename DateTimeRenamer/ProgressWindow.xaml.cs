@@ -85,6 +85,7 @@ namespace DateTimeRenamer
                         {
                             // 그림 파일
                             case ".jpg":
+                            case ".jpeg":
                             case ".png":
                                 dateTime = GetMetaData(file, "Exif SubIFD", "Date/Time Original");
                                 if (!string.IsNullOrWhiteSpace(dateTime))
@@ -99,6 +100,10 @@ namespace DateTimeRenamer
                             // 동영상 파일
                             case ".mov":
                             case ".mp4":
+                            case ".mpeg":
+                            case ".mpeg4":
+                            case ".mpg":
+                            case ".mpg4":
                                 dateTime = GetMetaData(file, "QuickTime Metadata Header", "Creation Date");
                                 if (!string.IsNullOrWhiteSpace(dateTime))
                                 {
