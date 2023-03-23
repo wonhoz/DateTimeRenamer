@@ -135,6 +135,12 @@ namespace DateTimeRenamer
                                     }
                                 }
                                 break;
+                            default:
+                                if (mode == 1) // Copy
+                                {
+                                    dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
+                                }
+                                break;
                         }
 
                         if (string.IsNullOrWhiteSpace(dateTime))
