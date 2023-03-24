@@ -110,22 +110,26 @@ namespace DateTimeRenamer
 
                     foreach (string file in files)
                     {
-                        string ext = System.IO.Path.GetExtension(file).ToLower();
+                        //string ext = System.IO.Path.GetExtension(file).ToLower();
 
-                        if ((ext == ".jpg") || (ext == ".png") || (ext == ".mov") || (ext == ".mp4"))
-                        {
-                            fileList.Add(file);
-                        }
+                        //if ((ext == ".jpg") || (ext == ".png") || (ext == ".mov") || (ext == ".mp4"))
+                        //{
+                        //    fileList.Add(file);
+                        //}
+
+                        fileList.Add(file);
                     }
                 }
                 else
                 {
-                    string ext = System.IO.Path.GetExtension(fileDrop).ToLower();
+                    //string ext = System.IO.Path.GetExtension(fileDrop).ToLower();
 
-                    if ((ext == ".jpg") || (ext == ".png") || (ext == ".mov") || (ext == ".mp4"))
-                    {
-                        fileList.Add(fileDrop);
-                    }
+                    //if ((ext == ".jpg") || (ext == ".png") || (ext == ".mov") || (ext == ".mp4"))
+                    //{
+                    //    fileList.Add(fileDrop);
+                    //}
+
+                    fileList.Add(fileDrop);
                 }
 
                 if (string.IsNullOrWhiteSpace(mainPath))

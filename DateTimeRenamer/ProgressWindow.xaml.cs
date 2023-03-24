@@ -54,6 +54,8 @@ namespace DateTimeRenamer
                         break;
                     }
 
+                    bool notSupport = false;
+
                     try
                     {
                         string ext = System.IO.Path.GetExtension(file);
@@ -136,6 +138,7 @@ namespace DateTimeRenamer
                                 }
                                 break;
                             default:
+                                notSupport = true;
                                 if (mode == 1) // Copy
                                 {
                                     dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
@@ -143,7 +146,7 @@ namespace DateTimeRenamer
                                 break;
                         }
 
-                        if (string.IsNullOrWhiteSpace(dateTime))
+                        if (string.IsNullOrWhiteSpace(dateTime) && !notSupport)
                         {
                             dateTime = GetMetaData(file, "File", "File Modified Date");
                             if (!string.IsNullOrWhiteSpace(dateTime))
@@ -221,51 +224,62 @@ namespace DateTimeRenamer
                             FileInfo fileInfo = new FileInfo(file);
                             string ext      = System.IO.Path.GetExtension(file);
                             string dateTime = fileInfo.LastWriteTime.ToString("yyyy-MM-dd HH.mm.ss");
-                            for (int j = 0; j < 1000; j++)
+                            if (notSupport)
                             {
-                                if (mode == 0) // Rename
+                                dateTime = string.Empty;
+                                if (mode == 1) // Copy
                                 {
-                                    string filePath = file.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
-                                    if (j == 0)
-                                    {
-                                        filePath = file.Replace(file.Split('\\').Last(), dateTime + ext);
-                                    }
-
-                                    if (File.Exists(filePath))
-                                    {
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        File.Move(file, filePath);
-                                        break;
-                                    }
+                                    dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
                                 }
-                                else if (mode == 1) // Copy
+                            }
+                            if (!string.IsNullOrWhiteSpace(dateTime))
+                            {
+                                for (int j = 0; j < 1000; j++)
                                 {
-                                    string dstFilePath   = file.Replace(srcPath, dstPath);
-                                    string dstFolderPath = dstFilePath.Replace("\\" + dstFilePath.Split('\\').Last(), string.Empty);
+                                    if (mode == 0) // Rename
+                                    {
+                                        string filePath = file.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
+                                        if (j == 0)
+                                        {
+                                            filePath = file.Replace(file.Split('\\').Last(), dateTime + ext);
+                                        }
 
-                                    DirectoryInfo directoryInfo = new DirectoryInfo(dstFolderPath);
-                                    if (!directoryInfo.Exists)
-                                    {
-                                        directoryInfo.Create();
+                                        if (File.Exists(filePath))
+                                        {
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            File.Move(file, filePath);
+                                            break;
+                                        }
                                     }
+                                    else if (mode == 1) // Copy
+                                    {
+                                        string dstFilePath   = file.Replace(srcPath, dstPath);
+                                        string dstFolderPath = dstFilePath.Replace("\\" + dstFilePath.Split('\\').Last(), string.Empty);
 
-                                    string filePath = dstFilePath.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
-                                    if (j == 0)
-                                    {
-                                        filePath = dstFilePath.Replace(file.Split('\\').Last(), dateTime + ext);
-                                    }
+                                        DirectoryInfo directoryInfo = new DirectoryInfo(dstFolderPath);
+                                        if (!directoryInfo.Exists)
+                                        {
+                                            directoryInfo.Create();
+                                        }
 
-                                    if (File.Exists(filePath))
-                                    {
-                                        continue;
-                                    }
-                                    else
-                                    {
-                                        File.Copy(file, filePath);
-                                        break;
+                                        string filePath = dstFilePath.Replace(file.Split('\\').Last(), dateTime + $"_{j}" + ext);
+                                        if (j == 0)
+                                        {
+                                            filePath = dstFilePath.Replace(file.Split('\\').Last(), dateTime + ext);
+                                        }
+
+                                        if (File.Exists(filePath))
+                                        {
+                                            continue;
+                                        }
+                                        else
+                                        {
+                                            File.Copy(file, filePath);
+                                            break;
+                                        }
                                     }
                                 }
                             }
