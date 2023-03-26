@@ -97,6 +97,8 @@ namespace DateTimeRenamer
                                     dateTime = dateTime.Insert(13, ".");
                                     dateTime = dateTime.Remove(16, 1);
                                     dateTime = dateTime.Insert(16, ".");
+
+                                    if (dateTime == "0000-00-00 00.00.00") dateTime = string.Empty;
                                 }
                                 break;
                             // 동영상 파일
@@ -115,6 +117,8 @@ namespace DateTimeRenamer
                                     if (month.Length == 1) month = "0" + month;
                                     if (day.Length   == 1) day   = "0" + day;
                                     dateTime = $"{dateTimeSplit[5]}-{month}-{day} {dateTimeSplit[3].Replace(":", ".")}";
+
+                                    if (dateTime == "0000-00-00 00.00.00") dateTime = string.Empty;
                                 }
                                 if (string.IsNullOrWhiteSpace(dateTime))
                                 {
@@ -133,6 +137,7 @@ namespace DateTimeRenamer
                                         tmpDateTime = tmpDateTime.AddHours(9);
                                         dateTime = tmpDateTime.ToString("yyyy-MM-dd HH.mm.ss");
 
+                                        if (dateTime == "0000-00-00 00.00.00") dateTime = string.Empty;
                                         if (dateTime == "1904-01-01 09.00.00") dateTime = string.Empty;
                                     }
                                 }
