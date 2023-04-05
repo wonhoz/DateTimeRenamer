@@ -10,6 +10,7 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -34,5 +35,10 @@
 
         <Button Grid.Row="1" Grid.Column="2" Name="BrowseButton" Content="Browse" Margin="2.5,5,5,5"
                 IsEnabled="False" Click="BrowseButton_Click"/>
+
+        <CheckBox Grid.Row="2" Grid.ColumnSpan="3" Name="UseFileWriteTimeCheckBox"
+                  Content="Use the last written time of a file if there is no EXIF or header"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
     </Grid>
 </Window>

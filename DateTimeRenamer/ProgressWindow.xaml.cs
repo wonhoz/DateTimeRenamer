@@ -33,7 +33,7 @@ namespace DateTimeRenamer
         }
 
 
-        public void Rename(List<string> fileList, string srcPath, string dstPath, int mode)
+        public void Rename(List<string> fileList, string srcPath, string dstPath, int mode, bool useFileWriteTime)
         {
             Task.Run(() =>
             {
@@ -163,6 +163,10 @@ namespace DateTimeRenamer
                                 if (day.Length   == 1) day   = "0" + day;
                                 dateTime = $"{dateTimeSplit[5]}-{month}-{day} {dateTimeSplit[3].Replace(":", ".")}";
                             }
+                            if (!useFileWriteTime)
+                            {
+                                dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
+                            }
                         }
                         if (!string.IsNullOrWhiteSpace(dateTime))
                         {
@@ -229,6 +233,10 @@ namespace DateTimeRenamer
                             FileInfo fileInfo = new FileInfo(file);
                             string ext      = System.IO.Path.GetExtension(file);
                             string dateTime = fileInfo.LastWriteTime.ToString("yyyy-MM-dd HH.mm.ss");
+                            if (!useFileWriteTime)
+                            {
+                                dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
+                            }
                             if (notSupport)
                             {
                                 dateTime = string.Empty;

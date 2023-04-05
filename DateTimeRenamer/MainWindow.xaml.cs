@@ -55,12 +55,12 @@ namespace DateTimeRenamer
                     if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                     {
                         PathTextBox.Text = dialog.FileName;
-                        RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex);
+                        RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex, UseFileWriteTimeCheckBox.IsChecked.Value);
                     }
                 }
                 else
                 {
-                    RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex);
+                    RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex, UseFileWriteTimeCheckBox.IsChecked.Value);
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace DateTimeRenamer
             return fileList;
         }
 
-        private void RenameFileList(List<string> fileList, string srcPath, string dstPath, int mode)
+        private void RenameFileList(List<string> fileList, string srcPath, string dstPath, int mode, bool useFileWriteTime)
         {
             if (fileList.Count > 0)
             {
@@ -149,7 +149,7 @@ namespace DateTimeRenamer
 
                 ProgressWindow progressWindow = new ProgressWindow();
                 progressWindow.Show();
-                progressWindow.Rename(fileList, srcPath, dstPath, mode);
+                progressWindow.Rename(fileList, srcPath, dstPath, mode, useFileWriteTime);
 
                 this.AllowDrop = true;
             }
