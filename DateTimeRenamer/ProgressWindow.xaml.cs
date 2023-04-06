@@ -33,7 +33,7 @@ namespace DateTimeRenamer
         }
 
 
-        public void Rename(List<string> fileList, string srcPath, string dstPath, int mode, bool useFileWriteTime)
+        public void Rename(List<string> fileList, string srcPath, string dstPath, int mode, bool doNothing, bool useFileWriteTime)
         {
             Task.Run(() =>
             {
@@ -144,7 +144,7 @@ namespace DateTimeRenamer
                                 break;
                             default:
                                 notSupport = true;
-                                if (mode == 1) // Copy
+                                if (!doNothing && (mode == 1)) // Copy
                                 {
                                     dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
                                 }
@@ -165,7 +165,18 @@ namespace DateTimeRenamer
                             }
                             if (!useFileWriteTime)
                             {
-                                dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
+                                if (mode == 0) // Rename
+                                {
+                                    dateTime = string.Empty;
+                                }
+                                else if (mode == 1) // Copy
+                                {
+                                    dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
+                                }
+                            }
+                            if (doNothing)
+                            {
+                                dateTime = string.Empty;
                             }
                         }
                         if (!string.IsNullOrWhiteSpace(dateTime))
@@ -235,15 +246,26 @@ namespace DateTimeRenamer
                             string dateTime = fileInfo.LastWriteTime.ToString("yyyy-MM-dd HH.mm.ss");
                             if (!useFileWriteTime)
                             {
-                                dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
+                                if (mode == 0) // Rename
+                                {
+                                    dateTime = string.Empty;
+                                }
+                                else if (mode == 1) // Copy
+                                {
+                                    dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
+                                }
                             }
                             if (notSupport)
                             {
                                 dateTime = string.Empty;
-                                if (mode == 1) // Copy
+                                if (!doNothing && (mode == 1)) // Copy
                                 {
                                     dateTime = file.Split('\\').Last().Replace(ext, string.Empty);
                                 }
+                            }
+                            if (doNothing)
+                            {
+                                dateTime = string.Empty;
                             }
                             if (!string.IsNullOrWhiteSpace(dateTime))
                             {

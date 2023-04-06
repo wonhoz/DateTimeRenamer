@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DateTimeRenamer"
         mc:Ignorable="d" Icon="petra.ico"
-        Title="Date Time Renamer" Height="200" Width="400" WindowStartupLocation="CenterScreen" AllowDrop="True" Drop="Window_Drop">
+        Title="Date Time Renamer" Height="250" Width="400" WindowStartupLocation="CenterScreen" AllowDrop="True" Drop="Window_Drop">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="50"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -36,9 +37,15 @@
         <Button Grid.Row="1" Grid.Column="2" Name="BrowseButton" Content="Browse" Margin="2.5,5,5,5"
                 IsEnabled="False" Click="BrowseButton_Click"/>
 
-        <CheckBox Grid.Row="2" Grid.ColumnSpan="3" Name="UseFileWriteTimeCheckBox"
+        <CheckBox Grid.Row="2" Grid.ColumnSpan="3" Name="DoNothingCheckBox" Margin="5,0"
+                  Content="Do nothing if there is no EXIF or header"
+                  Checked="DoNothingCheckBox_Checked" Unchecked="DoNothingCheckBox_Unchecked"
+                  HorizontalAlignment="Left" VerticalAlignment="Center"
+                  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
+        <CheckBox Grid.Row="3" Grid.ColumnSpan="3" Name="UseFileWriteTimeCheckBox" Margin="5,0"
                   Content="Use the last written time of a file if there is no EXIF or header"
-                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                  HorizontalAlignment="Left" VerticalAlignment="Center"
                   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
     </Grid>
 </Window>

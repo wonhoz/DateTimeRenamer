@@ -55,12 +55,12 @@ namespace DateTimeRenamer
                     if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
                     {
                         PathTextBox.Text = dialog.FileName;
-                        RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex, UseFileWriteTimeCheckBox.IsChecked.Value);
+                        RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex, DoNothingCheckBox.IsChecked.Value, UseFileWriteTimeCheckBox.IsChecked.Value);
                     }
                 }
                 else
                 {
-                    RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex, UseFileWriteTimeCheckBox.IsChecked.Value);
+                    RenameFileList(fileList, mainPath, PathTextBox.Text, ModeComboBox.SelectedIndex, DoNothingCheckBox.IsChecked.Value, UseFileWriteTimeCheckBox.IsChecked.Value);
                 }
             }
         }
@@ -91,6 +91,17 @@ namespace DateTimeRenamer
             {
                 PathTextBox.Text = dialog.FileName;
             }
+        }
+
+        private void DoNothingCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            UseFileWriteTimeCheckBox.IsChecked = false;
+            UseFileWriteTimeCheckBox.IsEnabled = false;
+        }
+
+        private void DoNothingCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            UseFileWriteTimeCheckBox.IsEnabled = true;
         }
 
 
@@ -141,7 +152,7 @@ namespace DateTimeRenamer
             return fileList;
         }
 
-        private void RenameFileList(List<string> fileList, string srcPath, string dstPath, int mode, bool useFileWriteTime)
+        private void RenameFileList(List<string> fileList, string srcPath, string dstPath, int mode, bool doNothing, bool useFileWriteTime)
         {
             if (fileList.Count > 0)
             {
@@ -149,7 +160,7 @@ namespace DateTimeRenamer
 
                 ProgressWindow progressWindow = new ProgressWindow();
                 progressWindow.Show();
-                progressWindow.Rename(fileList, srcPath, dstPath, mode, useFileWriteTime);
+                progressWindow.Rename(fileList, srcPath, dstPath, mode, doNothing, useFileWriteTime);
 
                 this.AllowDrop = true;
             }
